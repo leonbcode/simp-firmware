@@ -1,0 +1,3 @@
+[submodule "libs/lufa"]
+	path = libs/lufa
+	url = https://github.com/abcminiuser/lufa.git
