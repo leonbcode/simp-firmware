@@ -14,12 +14,16 @@
 #include <LUFA/Drivers/USB/USB.h>
 #include <LUFA/Platform/Platform.h>
 
+#include "Bitmaps.h"
 #include "Descriptors.h"
 #include "Matrix.h"
 #include "graphicsEngine/SLEngine.h"
 
+
 /* Function Prototypes: */
 void SetupHardware(void);
+void InitGraphicsEngine(void);
+
 void HID_Task(void);
 void OLED_Task(void);
 

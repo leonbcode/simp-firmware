@@ -1,6 +1,7 @@
 #ifndef _SLENGINE_H_
 #define _SLENGINE_H_
 
+#include <avr/pgmspace.h>
 #include <stdint.h>
 
 typedef struct Pair {

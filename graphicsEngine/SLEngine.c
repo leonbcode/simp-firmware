@@ -1,4 +1,5 @@
 #include "SLEngine.h"
+#include <avr/pgmspace.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -22,7 +23,7 @@ void renderFrame(uint8_t *frame_buffer) {
       uint16_t offset = (x - (x % sprite->width)) / sprite->width * 8;
       for (uint16_t y = 0; y < 8; y++) {
         setPixel(frame_buffer, layers[l].pos.y + offset + y, layers[l].pos.x + (x % sprite->width),
-                 sprite->bitmap[x] & (1 << y));
+                 pgm_read_byte(&sprite->bitmap[x]) & (1 << y));
       }
     }
     if (layers[l].isStatic)
