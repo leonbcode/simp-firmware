@@ -3,7 +3,7 @@
 	url = https://github.com/abcminiuser/lufa.git
 [submodule "libs/oled-ssd1306"]
 	path = libs/oled-ssd1306
-	url = https://github.com/leonbcode/AVR-OLED-SSD1306-IIC-DRIVER.git
+	url = git@github.com:leonbcode/AVR-OLED-SSD1306-IIC-DRIVER.git
 [submodule "libs/i2c"]
 	path = libs/i2c
 	url = https://github.com/prestonsn/AtmegaXX-I2C-Library.git
