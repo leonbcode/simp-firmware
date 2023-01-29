@@ -21,8 +21,7 @@ void renderFrame(uint8_t *frame_buffer) {
     for (uint16_t x = 0; x < sprite->size; x++) {
       uint16_t offset = (x - (x % sprite->width)) / sprite->width * 8;
       for (uint16_t y = 0; y < 8; y++) {
-        setPixel(frame_buffer, layers[l].pos.y + offset + y,
-                 layers[l].pos.x + (x % sprite->width),
+        setPixel(frame_buffer, layers[l].pos.y + offset + y, layers[l].pos.x + (x % sprite->width),
                  sprite->bitmap[x] & (1 << y));
       }
     }
@@ -37,9 +36,10 @@ void renderFrame(uint8_t *frame_buffer) {
 }
 
 void setPixel(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t pixelState) {
+  if (!pixelState)
+    return;
+
   uint8_t offset = row % 8;
   uint16_t pos = ((row - offset) / 8 * 128) + col;
-
-  if (pixelState)
-    buffer[pos] |= (1 << offset);
+  buffer[pos] |= (1 << offset);
 }

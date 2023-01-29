@@ -27,8 +27,7 @@ const USB_Descriptor_HIDReport_Datatype_t PROGMEM KeyboardReport[] = {
     HID_RI_USAGE_MAXIMUM(8, 0x05), /* Kana */
     HID_RI_REPORT_COUNT(8, 0x05),
     HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE |
-                         HID_IOF_NON_VOLATILE),
+    HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
     HID_RI_REPORT_COUNT(8, 0x01),
     HID_RI_REPORT_SIZE(8, 0x03),
     HID_RI_OUTPUT(8, HID_IOF_CONSTANT),
@@ -76,8 +75,7 @@ const USB_Descriptor_Device_t PROGMEM DeviceDescriptor = {
  * communicate with the USB device.
  */
 const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
-    .Config = {.Header = {.Size = sizeof(USB_Descriptor_Configuration_Header_t),
-                          .Type = DTYPE_Configuration},
+    .Config = {.Header = {.Size = sizeof(USB_Descriptor_Configuration_Header_t), .Type = DTYPE_Configuration},
 
                .TotalConfigurationSize = sizeof(USB_Descriptor_Configuration_t),
                .TotalInterfaces = 1,
@@ -85,13 +83,11 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
                .ConfigurationNumber = 1,
                .ConfigurationStrIndex = NO_DESCRIPTOR,
 
-               .ConfigAttributes =
-                   (USB_CONFIG_ATTR_RESERVED | USB_CONFIG_ATTR_SELFPOWERED),
+               .ConfigAttributes = (USB_CONFIG_ATTR_RESERVED | USB_CONFIG_ATTR_SELFPOWERED),
 
                .MaxPowerConsumption = USB_CONFIG_POWER_MA(100)},
 
-    .HID_Interface = {.Header = {.Size = sizeof(USB_Descriptor_Interface_t),
-                                 .Type = DTYPE_Interface},
+    .HID_Interface = {.Header = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
                       .InterfaceNumber = INTERFACE_ID_Keyboard,
                       .AlternateSetting = 0x00,
@@ -104,8 +100,7 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
 
                       .InterfaceStrIndex = NO_DESCRIPTOR},
 
-    .HID_KeyboardHID = {.Header = {.Size = sizeof(USB_HID_Descriptor_HID_t),
-                                   .Type = HID_DTYPE_HID},
+    .HID_KeyboardHID = {.Header = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
 
                         .HIDSpec = VERSION_BCD(1, 1, 1),
                         .CountryCode = 0x00,
@@ -113,26 +108,19 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
                         .HIDReportType = HID_DTYPE_Report,
                         .HIDReportLength = sizeof(KeyboardReport)},
 
-    .HID_ReportINEndpoint = {.Header = {.Size =
-                                            sizeof(USB_Descriptor_Endpoint_t),
-                                        .Type = DTYPE_Endpoint},
+    .HID_ReportINEndpoint = {.Header = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
                              .EndpointAddress = KEYBOARD_IN_EPADDR,
-                             .Attributes =
-                                 (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC |
-                                  ENDPOINT_USAGE_DATA),
+                             .Attributes = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
                              .EndpointSize = KEYBOARD_EPSIZE,
                              .PollingIntervalMS = 0x05},
 
-    .HID_ReportOUTEndpoint = {
-        .Header = {.Size = sizeof(USB_Descriptor_Endpoint_t),
-                   .Type = DTYPE_Endpoint},
+    .HID_ReportOUTEndpoint = {.Header = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-        .EndpointAddress = KEYBOARD_OUT_EPADDR,
-        .Attributes =
-            (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-        .EndpointSize = KEYBOARD_EPSIZE,
-        .PollingIntervalMS = 0x05}};
+                              .EndpointAddress = KEYBOARD_OUT_EPADDR,
+                              .Attributes = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
+                              .EndpointSize = KEYBOARD_EPSIZE,
+                              .PollingIntervalMS = 0x05}};
 
 /** Language descriptor structure. This descriptor, located in FLASH memory, is
  * returned when the host requests the string descriptor with index 0 (the first
@@ -140,23 +128,20 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
  * language ID table available at USB.org what languages the device supports for
  * its string descriptors.
  */
-const USB_Descriptor_String_t PROGMEM LanguageString =
-    USB_STRING_DESCRIPTOR_ARRAY(LANGUAGE_ID_ENG);
+const USB_Descriptor_String_t PROGMEM LanguageString = USB_STRING_DESCRIPTOR_ARRAY(LANGUAGE_ID_ENG);
 
 /** Manufacturer descriptor string. This is a Unicode string containing the
  * manufacturer's details in human readable form, and is read out upon request
  * by the host when the appropriate string ID is requested, listed in the Device
  *  Descriptor.
  */
-const USB_Descriptor_String_t PROGMEM ManufacturerString =
-    USB_STRING_DESCRIPTOR(L"LUFA Library");
+const USB_Descriptor_String_t PROGMEM ManufacturerString = USB_STRING_DESCRIPTOR(L"LUFA Library");
 
 /** Product descriptor string. This is a Unicode string containing the product's
  * details in human readable form, and is read out upon request by the host when
  * the appropriate string ID is requested, listed in the Device Descriptor.
  */
-const USB_Descriptor_String_t PROGMEM ProductString =
-    USB_STRING_DESCRIPTOR(L"LUFA Keyboard Demo");
+const USB_Descriptor_String_t PROGMEM ProductString = USB_STRING_DESCRIPTOR(L"LUFA Keyboard Demo");
 
 /** This function is called by the library when in device mode, and must be
  * overridden (see library "USB Descriptors" documentation) by the application
@@ -165,8 +150,7 @@ const USB_Descriptor_String_t PROGMEM ProductString =
  * control endpoint, this function is called so that the descriptor details can
  * be passed back and the appropriate descriptor sent back to the USB host.
  */
-uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
-                                    const uint16_t wIndex,
+uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue, const uint16_t wIndex,
                                     const void **const DescriptorAddress) {
   const uint8_t DescriptorType = (wValue >> 8);
   const uint8_t DescriptorNumber = (wValue & 0xFF);

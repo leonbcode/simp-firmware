@@ -2,7 +2,6 @@
 #define _MATRIX_H_
 
 #include <avr/io.h>
-#include <stdbool.h>
 #include <stdint.h>
 
 #include <LUFA/Drivers/USB/USB.h>

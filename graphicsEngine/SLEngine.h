@@ -3,9 +3,6 @@
 
 #include <stdint.h>
 
-#define PIXEL_ON 1
-#define PIXEL_OFF 0
-
 typedef struct Pair {
   uint8_t x, y;
 } Pair;

@@ -4,20 +4,19 @@
 /* Includes: */
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <avr/pgmspace.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
-#include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 
-#include "../libs/oled-ssd1306/SSD1306.h"
+#include "libs/oled-ssd1306/SSD1306.h"
 #include <LUFA/Drivers/USB/USB.h>
 #include <LUFA/Platform/Platform.h>
 
-#include "graphicsEngine/SLEngine.h"
 #include "Descriptors.h"
 #include "Matrix.h"
-#include "Pin.h"
-
+#include "graphicsEngine/SLEngine.h"
 
 /* Function Prototypes: */
 void SetupHardware(void);

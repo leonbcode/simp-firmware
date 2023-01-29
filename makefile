@@ -13,7 +13,7 @@ CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/
 flash:
 	sudo dfu-programmer atmega32u4 erase
 	sudo dfu-programmer atmega32u4 flash Keyboard.hex
-	sudo dfu-programmer atmega32u4 launch
+	sudo dfu-programmer atmega32u4 start
 
 	
 # Default target

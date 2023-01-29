@@ -22,6 +22,4 @@ void Pin_SetHigh(struct Pin *pin) { SETBIT(*pin->portReg, pin->offset); }
 
 void Pin_SetLow(struct Pin *pin) { CLEARBIT(*pin->portReg, pin->offset); }
 
-uint8_t Pin_Read(struct Pin *pin) {
-  return (*pin->pinReg & (1 << pin->offset));
-}
+uint8_t Pin_Read(struct Pin *pin) { return (*pin->pinReg & (1 << pin->offset)); }

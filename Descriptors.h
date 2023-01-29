@@ -35,8 +35,7 @@ enum InterfaceDescriptors_t {
  * used to refer to the string from other descriptors.
  */
 enum StringDescriptors_t {
-  STRING_ID_Language =
-      0, /**< Supported Languages string descriptor ID (must be zero) */
+  STRING_ID_Language = 0,     /**< Supported Languages string descriptor ID (must be zero) */
   STRING_ID_Manufacturer = 1, /**< Manufacturer string ID */
   STRING_ID_Product = 2,      /**< Product string ID */
 };
@@ -52,9 +51,8 @@ enum StringDescriptors_t {
 #define KEYBOARD_EPSIZE 8
 
 /* Function Prototypes: */
-uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
-                                    const uint16_t wIndex,
-                                    const void **const DescriptorAddress)
-    ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(3);
+uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue, const uint16_t wIndex,
+                                    const void **const DescriptorAddress) ATTR_WARN_UNUSED_RESULT
+    ATTR_NON_NULL_PTR_ARG(3);
 
 #endif

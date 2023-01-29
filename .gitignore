@@ -1,4 +1,13 @@
 .vscode/
 .cache/
 obj/
+
 compile_commands.json
+*.bin
+*.eep
+*.elf
+*.hex
+*.lss
+*.map
+*.map
+*.sym
