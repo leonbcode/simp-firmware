@@ -9,16 +9,20 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "../libs/oled-ssd1306/SSD1306.h"
 #include <LUFA/Drivers/USB/USB.h>
 #include <LUFA/Platform/Platform.h>
 
+#include "graphicsEngine/SLEngine.h"
 #include "Descriptors.h"
 #include "Matrix.h"
 #include "Pin.h"
 
+
 /* Function Prototypes: */
 void SetupHardware(void);
 void HID_Task(void);
+void OLED_Task(void);
 
 void EVENT_USB_Device_Connect(void);
 void EVENT_USB_Device_Disconnect(void);

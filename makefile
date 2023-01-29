@@ -5,13 +5,17 @@ F_CPU        = 16000000
 F_USB        = $(F_CPU)
 OPTIMIZATION = s
 TARGET       = Keyboard
-SRC          = $(TARGET).c Descriptors.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS) Pin.c Matrix.c
+SRC          = $(TARGET).c Descriptors.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS) Pin.c Matrix.c $(LIB)/i2c/i2c.c $(LIB)/oled-ssd1306/SSD1306.c graphicsEngine/SLEngine.c
 LUFA_PATH    = libs/lufa/LUFA
+LIB 		 = libs
 CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/
 
 flash:
 	sudo dfu-programmer atmega32u4 erase
 	sudo dfu-programmer atmega32u4 flash Keyboard.hex
+	sudo dfu-programmer atmega32u4 launch
+
+	
 # Default target
 all:
 # Include LUFA build script makefiles

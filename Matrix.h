@@ -11,7 +11,8 @@
 
 #define NUM_COLS 4
 #define NUM_ROWS 4
+#define NUM_LAYERS 1
 
-void initMatrix(void);
-void getReport(USB_KeyboardReport_Data_t *const ReportData);
+void Matrix_Init(void);
+void Matrix_GetReport(USB_KeyboardReport_Data_t *const ReportData);
 #endif

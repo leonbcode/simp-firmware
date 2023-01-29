@@ -14,9 +14,9 @@ struct Pin {
   uint8_t offset;
 };
 
-void initPin(struct Pin *pin, uint8_t addr, uint8_t offs, uint8_t isOutput);
-void setHigh(struct Pin *pin);
-void setLow(struct Pin *pin);
-uint8_t readPin(struct Pin *pin);
+void Pin_Init(struct Pin *pin, uint8_t addr, uint8_t offs, uint8_t isOutput);
+void Pin_SetHigh(struct Pin *pin);
+void Pin_SetLow(struct Pin *pin);
+uint8_t Pin_Read(struct Pin *pin);
 
 #endif
