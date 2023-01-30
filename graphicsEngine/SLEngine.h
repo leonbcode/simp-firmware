@@ -21,7 +21,7 @@ typedef struct State {
 } State;
 
 typedef struct Element {
-  uint8_t frame;
+  uint8_t frame_counter;
   Pair pos, vel;
   uint8_t isVisible;
   uint8_t isStatic;
@@ -31,5 +31,6 @@ typedef struct Element {
 void initEngine(Element *elements, uint8_t size);
 void renderFrame(uint8_t *frame_buffer);
 void setPixel(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t pixelState);
+void nextFrame(Element *element);
 
 #endif
