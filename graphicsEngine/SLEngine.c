@@ -14,6 +14,7 @@ void initEngine(Element *elements, uint8_t size) {
 }
 
 void renderFrame(uint8_t *frame_buffer) {
+  // TODO: render optimization
   // clear buffer
   memset(frame_buffer, 0, 512);
 
@@ -26,13 +27,11 @@ void renderFrame(uint8_t *frame_buffer) {
     Sprite *sprite = layers[l].state->sprite;
     for (uint16_t x = 0; x < sprite->size; x++) {
 
-      uint16_t offset = (x - (x % sprite->width)) / sprite->width * 8;
+      uint8_t x_offs = x % sprite->width;
+      uint16_t y_offs = (x - x_offs) / sprite->width * 8;
 
-      for (uint8_t y = 0; y < 8; y++) {
-
-        setPixel(frame_buffer, layers[l].pos.y + offset + y, layers[l].pos.x + (x % sprite->width),
-                 pgm_read_byte(&sprite->bitmap[x]) & (1 << y));
-      }
+      setPixelFromByte(frame_buffer, layers[l].pos.y + y_offs, layers[l].pos.x + x_offs,
+                       pgm_read_byte(&sprite->bitmap[x]));
     }
 
     if (layers[l].isStatic)
@@ -41,13 +40,18 @@ void renderFrame(uint8_t *frame_buffer) {
   }
 }
 
-void setPixel(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t pixelState) {
-  if (!pixelState)
+void setPixelFromByte(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t byte) {
+  if (!byte)
     return;
-
   uint8_t offset = row % 8;
   uint16_t pos = ((row - offset) / 8 * 128) + col;
-  buffer[pos] |= (1 << offset);
+  buffer[pos] |= (byte << offset);
+  if (offset == 0)
+    return;
+  pos += 128;
+  if (pos >= 512)
+    return;
+  buffer[pos] |= (byte >> (8 - offset));
 }
 
 void nextFrame(Element *element) {

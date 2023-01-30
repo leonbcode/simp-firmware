@@ -31,6 +31,7 @@ typedef struct Element {
 void initEngine(Element *elements, uint8_t size);
 void renderFrame(uint8_t *frame_buffer);
 void setPixel(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t pixelState);
+void setPixelFromByte(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t byte);
 void nextFrame(Element *element);
 
 #endif
