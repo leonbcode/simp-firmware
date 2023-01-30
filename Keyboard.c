@@ -1,40 +1,16 @@
 #include "Keyboard.h"
 
 volatile unsigned long millis;
+static uint8_t prev_buffer[512];
+static uint8_t buffer[512];
 
 ISR(TIMER1_COMPA_vect) { millis++; }
-
 
 int main(void) {
 
   SetupHardware();
   GlobalInterruptEnable();
-
-  Sprite moon0_sprite = {20, moon0, 60};
-  Sprite moon1_sprite = {20, moon1, 60};
-  Sprite moon2_sprite = {20, moon2, 60};
-  Sprite moon3_sprite = {20, moon3, 60};
-  Sprite moon4_sprite = {20, moon4, 60};
-  Sprite moon5_sprite = {20, moon5, 60};
-  Sprite moon6_sprite = {20, moon6, 60};
-  Sprite moon7_sprite = {20, moon7, 60};
-
-  State moon7_state = {3, &moon7_sprite, NULL};
-  State moon6_state = {3, &moon6_sprite, &moon7_state};
-  State moon5_state = {3, &moon5_sprite, &moon6_state};
-  State moon4_state = {3, &moon4_sprite, &moon5_state};
-  State moon3_state = {3, &moon3_sprite, &moon4_state};
-  State moon2_state = {3, &moon2_sprite, &moon3_state};
-  State moon1_state = {3, &moon1_sprite, &moon2_state};
-  State moon0_state = {3, &moon0_sprite, &moon1_state};
-  moon7_state.next = &moon0_state;
-
-  Sprite sky_sprite = {128, sky, 512};
-  State sky_state = {0, &sky_sprite, NULL};
-
-  // {0, {0, 0}, {0, 0}, 1, 1, &sky_state}
-  Element elements[2] = {{0, {98, 6}, {0, 0}, 1, 0, &moon0_state}, {0, {0, 0}, {0, 0}, 1, 1, &sky_state}};
-  initEngine(elements, 2);
+  InitGraphicsEngine();
 
   while (1) {
     HID_Task();
@@ -68,6 +44,36 @@ void SetupHardware(void) {
   OLED_Init();
 }
 
+void InitGraphicsEngine(void) {
+  memset(prev_buffer, 0, 512);
+  memset(buffer, 0, 512);
+
+  static Sprite moon0_sprite = {20, moon0, 60};
+  static Sprite moon1_sprite = {20, moon1, 60};
+  static Sprite moon2_sprite = {20, moon2, 60};
+  static Sprite moon3_sprite = {20, moon3, 60};
+  static Sprite moon4_sprite = {20, moon4, 60};
+  static Sprite moon5_sprite = {20, moon5, 60};
+  static Sprite moon6_sprite = {20, moon6, 60};
+  static Sprite moon7_sprite = {20, moon7, 60};
+
+  static State moon7_state = {3, &moon7_sprite, NULL};
+  static State moon6_state = {3, &moon6_sprite, &moon7_state};
+  static State moon5_state = {3, &moon5_sprite, &moon6_state};
+  static State moon4_state = {3, &moon4_sprite, &moon5_state};
+  static State moon3_state = {3, &moon3_sprite, &moon4_state};
+  static State moon2_state = {3, &moon2_sprite, &moon3_state};
+  static State moon1_state = {3, &moon1_sprite, &moon2_state};
+  static State moon0_state = {3, &moon0_sprite, &moon1_state};
+  moon7_state.next = &moon0_state;
+
+  static Sprite sky_sprite = {128, sky, 512};
+  static State sky_state = {0, &sky_sprite, NULL};
+
+  static Element elements[2] = {{0, {98, 6}, {0, 0}, 1, 0, &moon0_state}, {0, {0, 0}, {0, 0}, 1, 1, &sky_state}};
+  initEngine(elements, 2);
+}
+
 /** Function to manage HID report generation and transmission to the host, when
  * in report mode. */
 void HID_Task(void) {
@@ -83,10 +89,13 @@ void OLED_Task(void) {
 
   if (millis - startTime >= 128) {
     startTime = millis;
-    // OLED_AnimationNextFrame(test_bitmap);
-    static uint8_t buffer[512];
+
     renderFrame(buffer);
-    OLED_DisplayFrame(buffer);
+    if (memcmp(prev_buffer, buffer, 512) == 0)
+      return;
+
+    memcpy(prev_buffer, buffer, 512);
+    OLED_DisplayFrame(prev_buffer);
   }
 }
 
