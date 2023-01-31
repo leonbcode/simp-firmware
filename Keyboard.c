@@ -1,8 +1,8 @@
 #include "Keyboard.h"
 
 volatile unsigned long millis;
-static uint8_t prev_buffer[512];
-static uint8_t buffer[512];
+static uint8_t prev_buffer[BUFFER_SIZE];
+static uint8_t buffer[BUFFER_SIZE];
 
 ISR(TIMER1_COMPA_vect) { millis++; }
 
@@ -45,8 +45,9 @@ void SetupHardware(void) {
 }
 
 void InitGraphicsEngine(void) {
-  memset(prev_buffer, 0, 512);
-  memset(buffer, 0, 512);
+  // fill buffers with 0s
+  memset(prev_buffer, 0, BUFFER_SIZE);
+  memset(buffer, 0, BUFFER_SIZE);
 
   static Sprite moon0_sprite = {20, moon0, 60};
   static Sprite moon1_sprite = {20, moon1, 60};
@@ -70,7 +71,7 @@ void InitGraphicsEngine(void) {
   static Sprite sky_sprite = {128, sky, 512};
   static State sky_state = {0, &sky_sprite, NULL};
 
-  static Element elements[2] = {{0, {98, 6}, {0, 0}, 1, 0, &moon0_state}, {0, {0, 0}, {0, 0}, 1, 1, &sky_state}};
+  static Element elements[2] = {{0, {98, 6}, {0, 0}, 1, 0, 1, &moon0_state}, {0, {0, 0}, {0, 0}, 1, 1, 1, &sky_state}};
   initEngine(elements, 2);
 }
 
@@ -90,11 +91,12 @@ void OLED_Task(void) {
   if (millis - startTime >= 128) {
     startTime = millis;
 
-    renderFrame(buffer);
-    if (memcmp(prev_buffer, buffer, 512) == 0)
+    if (!renderFrame(buffer))
+      return;
+    if (memcmp(prev_buffer, buffer, BUFFER_SIZE) == 0)
       return;
 
-    memcpy(prev_buffer, buffer, 512);
+    memcpy(prev_buffer, buffer, BUFFER_SIZE);
     OLED_DisplayFrame(prev_buffer);
   }
 }

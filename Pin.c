@@ -1,6 +1,6 @@
 #include "Pin.h"
 
-void Pin_Init(struct Pin *pin, uint8_t reg_addr, uint8_t offs, uint8_t isOutput) {
+void Pin_Init(Pin *pin, uint8_t reg_addr, uint8_t offs, uint8_t isOutput) {
   pin->pinReg = &_SFR_IO8(reg_addr);
   pin->dataReg = &_SFR_IO8(reg_addr + 0x01);
   pin->portReg = &_SFR_IO8(reg_addr + 0x02);
@@ -18,8 +18,8 @@ void Pin_Init(struct Pin *pin, uint8_t reg_addr, uint8_t offs, uint8_t isOutput)
   }
 }
 
-void Pin_SetHigh(struct Pin *pin) { SETBIT(*pin->portReg, pin->offset); }
+void Pin_SetHigh(Pin *pin) { SETBIT(*pin->portReg, pin->offset); }
 
-void Pin_SetLow(struct Pin *pin) { CLEARBIT(*pin->portReg, pin->offset); }
+void Pin_SetLow(Pin *pin) { CLEARBIT(*pin->portReg, pin->offset); }
 
-uint8_t Pin_Read(struct Pin *pin) { return (*pin->pinReg & (1 << pin->offset)); }
+uint8_t Pin_Read(Pin *pin) { return (*pin->pinReg & (1 << pin->offset)); }

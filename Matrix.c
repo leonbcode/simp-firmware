@@ -1,7 +1,7 @@
 #include "Matrix.h"
 
-struct Pin cols[NUM_COLS];
-struct Pin rows[NUM_ROWS];
+Pin cols[NUM_COLS];
+Pin rows[NUM_ROWS];
 
 const uint8_t matrix[NUM_LAYERS][NUM_ROWS][NUM_COLS] = {
     {{HID_KEYBOARD_SC_A, HID_KEYBOARD_SC_B, HID_KEYBOARD_SC_C, HID_KEYBOARD_SC_D},
