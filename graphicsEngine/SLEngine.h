@@ -1,8 +1,12 @@
 #ifndef _SLENGINE_H_
 #define _SLENGINE_H_
 
+#include "LUFA/Common/Common.h"
+#include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <stdint.h>
+
+#define BUFFER_SIZE 512
 
 typedef struct Pair {
   uint8_t x, y;
@@ -25,13 +29,13 @@ typedef struct Element {
   Pair pos, vel;
   uint8_t isVisible;
   uint8_t isStatic;
+  uint8_t hasChanged;
   State *state;
 } Element;
 
 void initEngine(Element *elements, uint8_t size);
-void renderFrame(uint8_t *frame_buffer);
-void setPixel(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t pixelState);
+uint8_t renderFrame(uint8_t *frame_buffer);
 void setPixelFromByte(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t byte);
-void nextFrame(Element *element);
+void prepareNextFrame(Element *element);
 
 #endif
