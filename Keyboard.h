@@ -19,20 +19,15 @@
 #include "Matrix.h"
 #include "graphicsEngine/SLEngine.h"
 
-
 /* Function Prototypes: */
-void SetupHardware(void);
-void InitGraphicsEngine(void);
+void setup_hardware(void);
+void init_graphics_engine(void);
+void create_keyboard_report(USB_KeyboardReport_Data_t* const ReportData);
+void send_next_report(void);
 
 void HID_Task(void);
 void OLED_Task(void);
 
-void EVENT_USB_Device_Connect(void);
-void EVENT_USB_Device_Disconnect(void);
 void EVENT_USB_Device_ConfigurationChanged(void);
-void EVENT_USB_Device_StartOfFrame(void);
-
-void CreateKeyboardReport(USB_KeyboardReport_Data_t *const ReportData);
-void SendNextReport(void);
 
 #endif

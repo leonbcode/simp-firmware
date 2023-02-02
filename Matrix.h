@@ -8,10 +8,10 @@
 
 #include "Pin.h"
 
-#define NUM_COLS 4
-#define NUM_ROWS 4
+#define NUM_COLS   4
+#define NUM_ROWS   4
 #define NUM_LAYERS 1
 
-void Matrix_Init(void);
-void Matrix_GetReport(USB_KeyboardReport_Data_t *const ReportData);
+void MATRIX_Init(void);
+void MATRIX_GetReport(USB_KeyboardReport_Data_t* const report_data);
 #endif

@@ -1,41 +1,42 @@
 #ifndef _SLENGINE_H_
 #define _SLENGINE_H_
 
-#include "LUFA/Common/Common.h"
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <stdint.h>
 
+#include "LUFA/Common/Common.h"
+
 #define BUFFER_SIZE 512
 
-typedef struct Pair {
-  uint8_t x, y;
-} Pair;
+typedef struct {
+    uint8_t x, y;
+} pair_t;
 
-typedef struct Sprite {
-  uint8_t width;
-  uint8_t *bitmap;
-  uint16_t size;
-} Sprite;
+typedef struct {
+    uint8_t width;
+    const uint8_t* bitmap;
+    uint16_t size;
+} sprite_t;
 
-typedef struct State {
-  uint8_t duration;
-  Sprite *sprite;
-  struct State *next;
-} State;
+typedef struct State state_t;
 
-typedef struct Element {
-  uint8_t frame_counter;
-  Pair pos, vel;
-  uint8_t isVisible;
-  uint8_t isStatic;
-  uint8_t hasChanged;
-  State *state;
-} Element;
+struct State {
+    uint8_t duration;
+    sprite_t* sprite;
+    struct State* next;
+};
 
-void initEngine(Element *elements, uint8_t size);
-uint8_t renderFrame(uint8_t *frame_buffer);
-void setPixelFromByte(uint8_t *buffer, uint8_t row, uint8_t col, uint8_t byte);
-void prepareNextFrame(Element *element);
+typedef struct {
+    uint8_t frame_counter;
+    pair_t pos, vel;
+    uint8_t is_visible;
+    uint8_t is_static;
+    uint8_t has_changed;
+    state_t* state;
+} element_t;
+
+void SLE_InitEngine(element_t* elements, const size_t size);
+uint8_t SLE_RenderFrame(uint8_t* frame_buffer);
 
 #endif

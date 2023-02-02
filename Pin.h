@@ -4,19 +4,19 @@
 #include <avr/sfr_defs.h>
 #include <stdint.h>
 
-#define SETBIT(reg, offs) (reg |= (1 << offs))
+#define SETBIT(reg, offs)   (reg |= (1 << offs))
 #define CLEARBIT(reg, offs) (reg &= ~(1 << offs))
 
-typedef struct Pin {
-  volatile uint8_t *dataReg;
-  volatile uint8_t *portReg;
-  volatile uint8_t *pinReg;
-  uint8_t offset;
+typedef struct {
+    volatile uint8_t* data_reg;
+    volatile uint8_t* port_reg;
+    volatile uint8_t* pin_reg;
+    uint8_t offset;
 } Pin;
 
-void Pin_Init(Pin *pin, uint8_t addr, uint8_t offs, uint8_t isOutput);
-void Pin_SetHigh(Pin *pin);
-void Pin_SetLow(Pin *pin);
-uint8_t Pin_Read(Pin *pin);
+void PIN_Init(Pin* pin, uint8_t addr, uint8_t offset, uint8_t is_output);
+void PIN_SetHigh(Pin* pin);
+void PIN_SetLow(Pin* pin);
+uint8_t PIN_Read(Pin* pin);
 
 #endif
