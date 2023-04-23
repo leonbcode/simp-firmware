@@ -14,7 +14,7 @@
 #include <LUFA/Drivers/USB/USB.h>
 #include <LUFA/Platform/Platform.h>
 
-#include "Bitmaps.h"
+#include "res/Bitmaps.h"
 #include "Descriptors.h"
 #include "Matrix.h"
 #include "graphicsEngine/SLEngine.h"

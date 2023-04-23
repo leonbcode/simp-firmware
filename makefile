@@ -5,10 +5,11 @@ F_CPU        = 16000000
 F_USB        = $(F_CPU)
 OPTIMIZATION = s
 TARGET       = Keyboard
-SRC          = $(TARGET).c Descriptors.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS) Pin.c Matrix.c $(LIB)/i2c/i2c.c $(LIB)/oled-ssd1306/SSD1306.c graphicsEngine/SLEngine.c
+C_SOURCES    = $(wildcard src/*.c) $(wildcard src/**/*.c)
+SRC          = $(C_SOURCES) $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS) $(LIB)/i2c/i2c.c $(LIB)/oled-ssd1306/SSD1306.c
 LUFA_PATH    = libs/lufa/LUFA
 LIB 		 = libs
-CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/
+CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -Iconfig/
 
 flash:
 	sudo dfu-programmer atmega32u4 erase
