@@ -16,7 +16,7 @@ uint8_t SLE_RenderFrame(uint8_t* frame_buffer) {
 
     uint8_t render_new_frame = 0;
     for (uint8_t l = 0; l < layer_count; l++) {
-        if (layers[l].is_static) {
+        if (layers[l].is_static && !layers[l].has_changed) {
             continue;
         }
         prepare_next_frame(&layers[l]);
@@ -70,10 +70,14 @@ void prepare_next_frame(element_t* element) {
     element->pos.x += element->vel.x;
     element->pos.y += element->vel.y;
 
-    if (element->frame_counter > element->state->duration) {
+    if (element->frame_counter > element->state->duration && !element->is_static) {
         // jump to next state
         element->frame_counter = 0;
         element->has_changed = 1;
-        element->state = layers->state->next;
+        element->state = element->state->next;
     }
+    if (element->on_frame_update == NULL) {
+        return;
+    }
+    element->on_frame_update(element);
 }
