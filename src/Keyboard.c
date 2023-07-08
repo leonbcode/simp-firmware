@@ -44,11 +44,13 @@ void setup_hardware(void) {
     OLED_Init();
 }
 
+void test(element_t* element) {}
+
 void init_graphics_engine(void) {
     memset(prev_buffer, 0, BUFFER_SIZE);
     memset(buffer, 0, BUFFER_SIZE);
 
-    static sprite_t moon0_sprite = {20, moon0, 60};
+    /*     static sprite_t moon0_sprite = {20, moon0, 60};
     static sprite_t moon1_sprite = {20, moon1, 60};
     static sprite_t moon2_sprite = {20, moon2, 60};
     static sprite_t moon3_sprite = {20, moon3, 60};
@@ -67,12 +69,62 @@ void init_graphics_engine(void) {
     static state_t moon1_state = {3, &moon1_sprite, &moon2_state};
     static state_t moon0_state = {3, &moon0_sprite, &moon1_state};
     moon7_state.next = &moon0_state;
-    static state_t sky_state = {0, &sky_sprite, NULL};
+    static state_t sky_state = {0, &sky_sprite, NULL}; */
 
-    static element_t elements[2] = {{0, {98, 6}, {0, 0}, 1, 0, 1, &moon0_state},
-                                    {0, {0, 0}, {0, 0}, 1, 1, 1, &sky_state}};
+    static sprite_t dino0_sprite = {16, dino0, 32};
+    static sprite_t dino1_sprite = {16, dino1, 32};
+    static sprite_t dino2_sprite = {16, dino2, 32};
+    static sprite_t bird0_sprite = {16, bird0, 32};
+    static sprite_t bird1_sprite = {16, bird1, 32};
+    static sprite_t cactus0_sprite = {12, cactus0, 24};
+    static sprite_t ground_sprite = {128, ground, 128};
 
-    SLE_InitEngine(elements, 2);
+    static state_t dino0_state = {0, &dino0_sprite, NULL};
+    static state_t dino1_state = {0, &dino1_sprite, NULL};
+    static state_t dino2_state = {0, &dino2_sprite, &dino1_state};
+    dino1_state.next = &dino2_state;
+
+    static state_t bird0_state = {2, &bird0_sprite, NULL};
+    static state_t bird1_state = {2, &bird1_sprite, &bird0_state};
+    bird0_state.next = &bird1_state;
+    static state_t cauctus0_state = {0, &cactus0_sprite, NULL};
+    static state_t ground_state = {0, &ground_sprite, NULL};
+
+    /* {0, {98, 6}, {0, 0}, 1, 0, 1, &moon0_state}, {0, {0, 0}, {0, 0}, 1, 1, 1, &sky_state, NULL} */
+    static element_t elements[] = {{.frame_counter = 0,
+                                    .pos = {.x = 0, .y = 30},
+                                    .vel = {.x = 0, .y = 0},
+                                    .is_visible = 1,
+                                    .is_static = 1,
+                                    .has_changed = 1,
+                                    .state = &ground_state,
+                                    .on_frame_update = NULL},
+                                   {.frame_counter = 0,
+                                    .pos = {.x = 8, .y = 14},
+                                    .vel = {.x = 0, .y = 0},
+                                    .is_visible = 1,
+                                    .is_static = 0,
+                                    .has_changed = 1,
+                                    .state = &dino1_state,
+                                    .on_frame_update = test},
+                                   {.frame_counter = 0,
+                                    .pos = {.x = 100, .y = 15},
+                                    .vel = {.x = 0, .y = 0},
+                                    .is_visible = 1,
+                                    .is_static = 0,
+                                    .has_changed = 1,
+                                    .state = &bird0_state,
+                                    .on_frame_update = test},
+                                   {.frame_counter = 0,
+                                    .pos = {.x = 64, .y = 16},
+                                    .vel = {.x = 0, .y = 0},
+                                    .is_visible = 1,
+                                    .is_static = 1,
+                                    .has_changed = 1,
+                                    .state = &cauctus0_state,
+                                    .on_frame_update = NULL}};
+
+    SLE_InitEngine(elements, sizeof(elements) / sizeof(element_t));
 }
 
 /** Function to manage HID report generation and transmission to the host, when
@@ -89,7 +141,7 @@ void HID_Task(void) {
 void OLED_Task(void) {
     static unsigned long startTime;
 
-    if (millis - startTime >= 128) {
+    if (millis - startTime >= 100) {
         startTime = millis;
 
         if (!SLE_RenderFrame(buffer)) {
