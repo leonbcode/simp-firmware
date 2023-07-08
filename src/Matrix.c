@@ -4,10 +4,13 @@ Pin cols[NUM_COLS];
 Pin rows[NUM_ROWS];
 
 const uint8_t matrix[NUM_LAYERS][NUM_ROWS][NUM_COLS] = {
-    {{HID_KEYBOARD_SC_A, HID_KEYBOARD_SC_B, HID_KEYBOARD_SC_C, HID_KEYBOARD_SC_D},
-     {HID_KEYBOARD_SC_E, HID_KEYBOARD_SC_F, HID_KEYBOARD_SC_G, HID_KEYBOARD_SC_H},
-     {HID_KEYBOARD_SC_I, HID_KEYBOARD_SC_J, HID_KEYBOARD_SC_K, HID_KEYBOARD_SC_L},
-     {HID_KEYBOARD_SC_M, HID_KEYBOARD_SC_N, HID_KEYBOARD_SC_O, HID_KEYBOARD_SC_P}},
+    {
+        {HID_KEYBOARD_SC_F13, HID_KEYBOARD_SC_F14, HID_KEYBOARD_SC_F15, HID_KEYBOARD_SC_F16},
+        {HID_KEYBOARD_SC_F17, HID_KEYBOARD_SC_F18, HID_KEYBOARD_SC_F19, HID_KEYBOARD_SC_F20},
+        {HID_KEYBOARD_SC_F21, HID_KEYBOARD_SC_F22, HID_KEYBOARD_SC_F23, HID_KEYBOARD_SC_F24},
+        {HID_KEYBOARD_SC_MEDIA_CALCULATOR, HID_KEYBOARD_SC_MEDIA_WWW, HID_KEYBOARD_SC_MEDIA_SLEEP,
+         HID_KEYBOARD_SC_RESERVED},
+    },
     {{HID_KEYBOARD_SC_X, HID_KEYBOARD_SC_B, HID_KEYBOARD_SC_C, HID_KEYBOARD_SC_D},
      {HID_KEYBOARD_SC_E, HID_KEYBOARD_SC_F, HID_KEYBOARD_SC_G, HID_KEYBOARD_SC_H},
      {HID_KEYBOARD_SC_I, HID_KEYBOARD_SC_J, HID_KEYBOARD_SC_K, HID_KEYBOARD_SC_L},
@@ -18,8 +21,8 @@ const uint8_t matrix[NUM_LAYERS][NUM_ROWS][NUM_COLS] = {
      {HID_KEYBOARD_SC_M, HID_KEYBOARD_SC_N, HID_KEYBOARD_SC_O, HID_KEYBOARD_SC_P}}};
 
 const uint8_t layer_switch_keys[NUM_LAYERS][NUM_ROWS][NUM_COLS] = {
-    {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 1, 0}},
-    {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 2}},
+    {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 1}},
+    {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 2, 0}},
     {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}};
 
 void MATRIX_Init(void) {
@@ -38,12 +41,11 @@ void MATRIX_GetReport(USB_KeyboardReport_Data_t* const report_data) {
     uint8_t used_key_codes = 0;
     uint8_t layer = 0;
     uint8_t pressed_keys[NUM_ROWS][NUM_COLS];
-    memset(pressed_keys,0, sizeof(pressed_keys));
+    memset(pressed_keys, 0, sizeof(pressed_keys));
     memset(report_data, 0, sizeof(USB_KeyboardReport_Data_t));
 
     /* The matrix uses inverted logic, which means a key is pressed, when the corresponding pin reads 0. */
     /* Layer switching has a fixed matrix itertion*/
-    /* TODO: Debounce Time of Layer Keys???*/
     for (int i = 0; i < NUM_ROWS; i++) {
         PIN_SetLow(&rows[i]);
         for (int j = 0; j < NUM_COLS; j++) {
