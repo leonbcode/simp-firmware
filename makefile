@@ -11,12 +11,6 @@ LUFA_PATH    = libs/lufa/LUFA
 LIB 		 = libs
 CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -Iconfig/
 
-flash:
-	sudo dfu-programmer atmega32u4 erase
-	sudo dfu-programmer atmega32u4 flash Keyboard.hex
-	sudo dfu-programmer atmega32u4 start
-
-	
 # Default target
 all:
 # Include LUFA build script makefiles
@@ -29,3 +23,10 @@ include $(LUFA_PATH)/Build/lufa_dfu.mk
 include $(LUFA_PATH)/Build/lufa_hid.mk
 include $(LUFA_PATH)/Build/lufa_avrdude.mk
 include $(LUFA_PATH)/Build/lufa_atprogram.mk
+
+
+flash:
+	$(MAKE) all
+	sudo dfu-programmer atmega32u4 erase
+	sudo dfu-programmer atmega32u4 flash Keyboard.hex
+	sudo dfu-programmer atmega32u4 start
