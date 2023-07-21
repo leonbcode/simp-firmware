@@ -8,9 +8,11 @@
 #include "LUFA/Common/Common.h"
 
 #define BUFFER_SIZE 512
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 32
 
 typedef struct {
-    uint8_t x, y;
+    int8_t x, y;
 } pair_t;
 
 typedef struct {
@@ -32,6 +34,7 @@ struct Element{
     pair_t pos, vel;
     uint8_t is_visible;
     uint8_t is_static;
+    uint8_t is_wraping;
     uint8_t has_changed;
     state_t* state;
 

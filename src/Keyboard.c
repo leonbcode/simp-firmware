@@ -50,7 +50,8 @@ void init_graphics_engine(void) {
     memset(prev_buffer, 0, BUFFER_SIZE);
     memset(buffer, 0, BUFFER_SIZE);
 
-    /*     static sprite_t moon0_sprite = {20, moon0, 60};
+    /*
+    static sprite_t moon0_sprite = {20, moon0, 60};
     static sprite_t moon1_sprite = {20, moon1, 60};
     static sprite_t moon2_sprite = {20, moon2, 60};
     static sprite_t moon3_sprite = {20, moon3, 60};
@@ -69,7 +70,9 @@ void init_graphics_engine(void) {
     static state_t moon1_state = {3, &moon1_sprite, &moon2_state};
     static state_t moon0_state = {3, &moon0_sprite, &moon1_state};
     moon7_state.next = &moon0_state;
-    static state_t sky_state = {0, &sky_sprite, NULL}; */
+    static state_t sky_state = {0, &sky_sprite, NULL};
+    static element_t elements[] = {{0, {98, 6}, {0, 0}, 1, 0, 1, &moon0_state}, {0, {0, 0}, {0, 0}, 1, 1, 1, &sky_state, NULL}};
+    */
 
     static sprite_t dino0_sprite = {16, dino0, 32};
     static sprite_t dino1_sprite = {16, dino1, 32};
@@ -90,39 +93,42 @@ void init_graphics_engine(void) {
     static state_t cauctus0_state = {0, &cactus0_sprite, NULL};
     static state_t ground_state = {0, &ground_sprite, NULL};
 
-    /* {0, {98, 6}, {0, 0}, 1, 0, 1, &moon0_state}, {0, {0, 0}, {0, 0}, 1, 1, 1, &sky_state, NULL} */
     static element_t elements[] = {{.frame_counter = 0,
                                     .pos = {.x = 0, .y = 30},
                                     .vel = {.x = 0, .y = 0},
                                     .is_visible = 1,
                                     .is_static = 1,
+                                    .is_wraping = 1,
                                     .has_changed = 1,
                                     .state = &ground_state,
                                     .on_frame_update = NULL},
-                                   {.frame_counter = 0,
-                                    .pos = {.x = 8, .y = 14},
-                                    .vel = {.x = 0, .y = 0},
-                                    .is_visible = 1,
-                                    .is_static = 0,
-                                    .has_changed = 1,
-                                    .state = &dino1_state,
-                                    .on_frame_update = test},
-                                   {.frame_counter = 0,
-                                    .pos = {.x = 100, .y = 15},
-                                    .vel = {.x = 0, .y = 0},
-                                    .is_visible = 1,
-                                    .is_static = 0,
-                                    .has_changed = 1,
-                                    .state = &bird0_state,
-                                    .on_frame_update = test},
                                    {.frame_counter = 0,
                                     .pos = {.x = 64, .y = 16},
                                     .vel = {.x = 0, .y = 0},
                                     .is_visible = 1,
                                     .is_static = 1,
+                                    .is_wraping = 0,
                                     .has_changed = 1,
                                     .state = &cauctus0_state,
-                                    .on_frame_update = NULL}};
+                                    .on_frame_update = NULL},
+                                   {.frame_counter = 0,
+                                    .pos = {.x = 100, .y = 15},
+                                    .vel = {.x = 0, .y = 0},
+                                    .is_visible = 1,
+                                    .is_static = 0,
+                                    .is_wraping = 0,
+                                    .has_changed = 1,
+                                    .state = &bird0_state,
+                                    .on_frame_update = test},
+                                   {.frame_counter = 0,
+                                    .pos = {.x = 8, .y = 14},
+                                    .vel = {.x = 0, .y = 0},
+                                    .is_visible = 1,
+                                    .is_static = 0,
+                                    .is_wraping = 0,
+                                    .has_changed = 1,
+                                    .state = &dino1_state,
+                                    .on_frame_update = test}};
 
     SLE_InitEngine(elements, sizeof(elements) / sizeof(element_t));
 }

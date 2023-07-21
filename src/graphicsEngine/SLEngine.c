@@ -3,7 +3,7 @@
 element_t* layers;
 uint8_t layer_count;
 
-void set_pixel_from_byte(uint8_t* buffer, uint8_t row, uint8_t col, uint8_t byte);
+void set_pixel_from_byte(uint8_t* buffer, int8_t row, int8_t col, uint8_t byte);
 void prepare_next_frame(element_t* element);
 
 void SLE_InitEngine(element_t* elements, const size_t size) {
@@ -27,7 +27,7 @@ uint8_t SLE_RenderFrame(uint8_t* frame_buffer) {
         return 0;
     }
 
-    // loop thorugh each layer
+    // loop through each layer
     for (uint8_t l = 0; l < layer_count; l++) {
         // skip if layer isn't visible
         if (!layers[l].is_visible) {
@@ -50,17 +50,21 @@ uint8_t SLE_RenderFrame(uint8_t* frame_buffer) {
     return 1;
 }
 
-void set_pixel_from_byte(uint8_t* buffer, uint8_t row, uint8_t col, uint8_t data_byte) {
+void set_pixel_from_byte(uint8_t* buffer, int8_t row, int8_t col, uint8_t data_byte) {
+    //TODO: wrap around behaviour
     if (!data_byte) {
         return;
     }
+    if(col < 0){
+        col += SCREEN_WIDTH;
+    }
     uint8_t offset = row % 8;
-    uint16_t pos = ((row - offset) / 8 * 128) + col;
+    uint16_t pos = ((row - offset) / 8 * SCREEN_WIDTH) + col;
     buffer[pos] |= (data_byte << offset);
-    if (offset == 0 || pos >= BUFFER_SIZE - 128) {
+    if (offset == 0 || pos >= BUFFER_SIZE - SCREEN_WIDTH) {
         return;
     }
-    pos += 128;
+    pos += SCREEN_WIDTH;
     buffer[pos] |= (data_byte >> (8 - offset));
 }
 

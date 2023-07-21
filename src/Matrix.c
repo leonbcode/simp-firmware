@@ -23,7 +23,6 @@ void MATRIX_GetReport(USB_KeyboardReport_Data_t* const report_data) {
     memset(report_data, 0, sizeof(USB_KeyboardReport_Data_t));
 
     /* The matrix uses inverted logic, which means a key is pressed, when the corresponding pin reads 0. */
-    /* Layer switching has a fixed matrix itertion*/
     for (int i = 0; i < NUM_ROWS; i++) {
         PIN_SetLow(&rows[i]);
         for (int j = 0; j < NUM_COLS; j++) {
