@@ -82,20 +82,20 @@ void init_graphics_engine(void) {
     static sprite_t cactus0_sprite = {12, cactus0, 24};
     static sprite_t ground_sprite = {128, ground, 128};
 
-    static state_t dino0_state = {0, &dino0_sprite, NULL};
-    static state_t dino1_state = {0, &dino1_sprite, NULL};
-    static state_t dino2_state = {0, &dino2_sprite, &dino1_state};
+    static state_t dino0_state = {1, &dino0_sprite, NULL};
+    static state_t dino1_state = {1, &dino1_sprite, NULL};
+    static state_t dino2_state = {1, &dino2_sprite, &dino1_state};
     dino1_state.next = &dino2_state;
 
-    static state_t bird0_state = {2, &bird0_sprite, NULL};
-    static state_t bird1_state = {2, &bird1_sprite, &bird0_state};
+    static state_t bird0_state = {4, &bird0_sprite, NULL};
+    static state_t bird1_state = {4, &bird1_sprite, &bird0_state};
     bird0_state.next = &bird1_state;
     static state_t cauctus0_state = {0, &cactus0_sprite, NULL};
     static state_t ground_state = {0, &ground_sprite, NULL};
 
     static element_t elements[] = {{.frame_counter = 0,
                                     .pos = {.x = 0, .y = 30},
-                                    .vel = {.x = 0, .y = 0},
+                                    .vel = {.x = -1, .y = 0},
                                     .is_visible = 1,
                                     .is_static = 1,
                                     .is_wraping = 1,
@@ -104,7 +104,7 @@ void init_graphics_engine(void) {
                                     .on_frame_update = NULL},
                                    {.frame_counter = 0,
                                     .pos = {.x = 64, .y = 16},
-                                    .vel = {.x = 0, .y = 0},
+                                    .vel = {.x = -1, .y = 0},
                                     .is_visible = 1,
                                     .is_static = 1,
                                     .is_wraping = 0,
@@ -147,7 +147,7 @@ void HID_Task(void) {
 void OLED_Task(void) {
     static unsigned long startTime;
 
-    if (millis - startTime >= 100) {
+    if (millis - startTime >= 40) {
         startTime = millis;
 
         if (!SLE_RenderFrame(buffer)) {

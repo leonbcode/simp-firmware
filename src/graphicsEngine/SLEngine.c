@@ -3,7 +3,7 @@
 element_t* layers;
 uint8_t layer_count;
 
-void set_pixel_from_byte(uint8_t* buffer, int8_t row, int8_t col, uint8_t byte);
+void set_pixel_from_byte(uint8_t* buffer, int8_t row, int8_t col, uint8_t byte, uint8_t is_wraping);
 void prepare_next_frame(element_t* element);
 
 void SLE_InitEngine(element_t* elements, const size_t size) {
@@ -16,9 +16,6 @@ uint8_t SLE_RenderFrame(uint8_t* frame_buffer) {
 
     uint8_t render_new_frame = 0;
     for (uint8_t l = 0; l < layer_count; l++) {
-        if (layers[l].is_static && !layers[l].has_changed) {
-            continue;
-        }
         prepare_next_frame(&layers[l]);
         render_new_frame = render_new_frame | layers[l].has_changed;
     }
@@ -42,7 +39,7 @@ uint8_t SLE_RenderFrame(uint8_t* frame_buffer) {
             uint16_t page_offs = (x - row_offs) / sprite->width * 8;
 
             set_pixel_from_byte(frame_buffer, layers[l].pos.y + page_offs, layers[l].pos.x + row_offs,
-                                pgm_read_byte(&sprite->bitmap[x]));
+                                pgm_read_byte(&sprite->bitmap[x]), layers[l].is_wraping);
         }
 
         layers[l].has_changed = 0;
@@ -50,12 +47,15 @@ uint8_t SLE_RenderFrame(uint8_t* frame_buffer) {
     return 1;
 }
 
-void set_pixel_from_byte(uint8_t* buffer, int8_t row, int8_t col, uint8_t data_byte) {
+void set_pixel_from_byte(uint8_t* buffer, int8_t row, int8_t col, uint8_t data_byte, uint8_t is_wraping) {
     //TODO: wrap around behaviour
     if (!data_byte) {
         return;
     }
-    if(col < 0){
+    if (col < 0) {
+        if (!is_wraping) {
+            return;
+        }
         col += SCREEN_WIDTH;
     }
     uint8_t offset = row % 8;
