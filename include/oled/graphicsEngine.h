@@ -34,5 +34,5 @@ struct element {
     void (*on_frame_update)(element_t *element);
 };
 
-void initGraphicsEngine(element_t *elements, size_t size);
-void renderFrame(uint8_t *frameBuffer);
+void graphics_engine_init(element_t *elements, size_t size);
+void render_frame(uint8_t *frameBuffer);

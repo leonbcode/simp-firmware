@@ -7,7 +7,7 @@
 element_t *layers;
 size_t layerCount;
 
-void initGraphicsEngine(element_t *elements, size_t size) {
+void graphics_engine_init(element_t *elements, size_t size) {
     layers = elements;
     layerCount = size;
 }
@@ -50,7 +50,7 @@ void setPixelFromByte(uint8_t *buffer, int8_t row, int8_t col, uint8_t dataByte,
     buffer[pos] |= (dataByte >> (8 - offset));
 }
 
-void renderFrame(uint8_t *frameBuffer) {
+void render_frame(uint8_t *frameBuffer) {
     memset(frameBuffer, 0, BUFFER_SIZE);
 
     for (size_t i = 0; i < layerCount; i++) {
@@ -71,8 +71,8 @@ void renderFrame(uint8_t *frameBuffer) {
             uint8_t row_offs = x % sprite->width;
             uint16_t page_offs = (x - row_offs) / sprite->width * 8;
 
-            setPixelFromByte(frameBuffer, layers[l].pos.y + page_offs, layers[l].pos.x + row_offs,
-                             pgm_read_byte(&sprite->bitmap[x]), layers[l].isWrapping);
+            setPixelFromByte(frameBuffer, layers[l].pos.y + page_offs, layers[l].pos.x + row_offs, pgm_read_byte(&sprite->bitmap[x]),
+                             layers[l].isWrapping);
         }
     }
 }

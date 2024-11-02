@@ -14,9 +14,9 @@
  Macros for Dec2Ascii,Hec2Ascii and Acsii2Hex conversion
  *****************************************************************************************************/
 #define util_Dec2Ascii(Dec) ((Dec) + 0x30)
-#define util_Ascii2Dec(Asc) ((Asc)-0x30)
+#define util_Ascii2Dec(Asc) ((Asc) - 0x30)
 #define util_Hex2Ascii(Hex) (((Hex) > 0x09) ? ((Hex) + 0x37) : ((Hex) + 0x30))
-#define util_Ascii2Hex(Asc) (((Asc) > 0x39) ? ((Asc)-0x37) : ((Asc)-0x30))
+#define util_Ascii2Hex(Asc) (((Asc) > 0x39) ? ((Asc) - 0x37) : ((Asc) - 0x30))
 #define util_GetBitStatus(x, bit) (((x) & (util_GetBitMask(bit))) != 0u)
 #define util_GetBitMask(bit) (1 << (bit))
 /***************************************************************************************************/
@@ -114,23 +114,19 @@ typedef enum { E_BINARY = 2, E_DECIMAL = 10, E_HEX = 16 } NumericSystem_et;
 #define C_DisplayDefaultDigits_U8 0xffu  // Will display the exact digits in the number
 #define C_MaxDigitsToDisplay_U8 10u      // Max decimal/hexadecimal digits to be displayed
 #define C_NumOfBinDigitsToDisplay_U8 16u // Max bits of a binary number to be displayed
-#define C_MaxDigitsToDisplayUsingPrintf_U8                                                                             \
-    C_DisplayDefaultDigits_U8 /* Max dec/hexadecimal digits to be displayed                                            \
+#define C_MaxDigitsToDisplayUsingPrintf_U8                                                                                                 \
+    C_DisplayDefaultDigits_U8 /* Max dec/hexadecimal digits to be displayed                                                                \
                                  using printf */
 
 #define C_MaxBarGraphs_U8 5
 
-/***************************************************************************************************
- Function Prototypes
- ***************************************************************************************************/
-void OLED_Init(void);
-void OLED_DisplayChar(uint8_t ch);
-void OLED_DisplayString(uint8_t *);
-void OLED_Clear(void);
-void OLED_GoToLine(uint8_t);
-void OLED_GoToNextLine(void);
-void OLED_SetCursor(uint8_t lineNumber, uint8_t CursorPosition);
-void OLED_DisplayFrame(uint8_t *buffer);
-void OLED_EnableInversion(void);
-void OLED_DisableInversion(void);
-/**************************************************************************************************/
+void oled_init(void);
+void oled_dispay_char(uint8_t ch);
+void oled_display_string(uint8_t *);
+void oled_clear(void);
+void oled_goto_line(uint8_t);
+void oled_goto_next_line(void);
+void oled_set_cursor(uint8_t lineNumber, uint8_t CursorPosition);
+void oled_display_frame(uint8_t *buffer);
+void oled_enable_inversion(void);
+void oled_disable_inversion(void);

@@ -23,12 +23,11 @@ void pin_set_high(pin_t *pin);
 void pin_set_low(pin_t *pin);
 uint8_t pin_read(pin_t *pin);
 
-#define NUM_COLS   4
-#define NUM_ROWS   4
+#define NUM_COLS 4
+#define NUM_ROWS 4
 #define NUM_LAYERS 1
 
 static const uint8_t matrix[NUM_LAYERS][NUM_ROWS][NUM_COLS] = {
-    {{0x04, 0x05, 0x06, 0x07},
-     {0x04, 0x05, 0x06, 0x07},
-     {0x04, 0x05, 0x06, 0x07},
-     {0x04, 0x05, 0x06, 0x07}}};
+    {{0x04, 0x05, 0x06, 0x07}, {0x04, 0x05, 0x06, 0x07}, {0x04, 0x05, 0x06, 0x07}, {0x04, 0x05, 0x06, 0x07}}};
+
+static const uint8_t layer_switch_keys[NUM_ROWS][NUM_COLS] = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};

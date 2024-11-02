@@ -34,7 +34,7 @@ void setupHardware(void) {
     /* Disable clock division */
     clock_prescale_set(clock_div_1);
 
-    OLED_Init();
+    oled_init();
     usb_init();
     matrix_init();
 }
@@ -92,7 +92,7 @@ void initializeGraphicsEngine(void) {
                                     .state = &dino1_state,
                                     .on_frame_update = NULL}};
 
-    initGraphicsEngine(elements, sizeof(elements) / sizeof(element_t));
+    graphics_engine_init(elements, sizeof(elements) / sizeof(element_t));
 }
 
 void oledTask(void) {
@@ -104,14 +104,13 @@ void oledTask(void) {
         startTime = millis;
     }
 
-    renderFrame(buffer);
+    render_frame(buffer);
     if (memcmp(prevBuffer, buffer, BUFFER_SIZE) == 0) {
         return;
     }
     memcpy(prevBuffer, buffer, BUFFER_SIZE);
-    OLED_DisplayFrame(buffer);
+    oled_display_frame(buffer);
 }
-
 
 void hidTask(void) {
     if (!get_usb_config_status())

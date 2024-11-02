@@ -14,11 +14,11 @@ uint8_t OledLineNum, OledCursorPos;
 /***************************************************************************************************
  Local Function Declaration
  ***************************************************************************************************/
-void oledSendCommand(uint8_t cmd);
-void oledSendStart(uint8_t address);
-void oledSendStop(void);
+void oled_send_command(uint8_t cmd);
+void oled_send_start(uint8_t address);
+void oled_send_stop(void);
 void oledWaitForAck(void);
-void oledSendByte(uint8_t ch);
+void oled_send_byte(uint8_t ch);
 /**************************************************************************************************/
 
 #define FONT_SIZE 5
@@ -136,36 +136,36 @@ const unsigned char OledFontTable[][FONT_SIZE] = {
  mode. After initializing the OLED, It clears the OLED and sets the cursor to
  first line first position. .
  **************************************************************************************************/
-void OLED_Init(void) {
+void oled_init(void) {
     i2c_init();
 
-    oledSendCommand(SSD1306_DISPLAY_OFF);
-    oledSendCommand(SSD1306_SET_DISPLAY_CLOCK_DIV_RATIO);
-    oledSendCommand(0x80);
-    oledSendCommand(SSD1306_SET_MULTIPLEX_RATIO);
-    oledSendCommand(0x1F);
-    oledSendCommand(SSD1306_SET_DISPLAY_OFFSET);
-    oledSendCommand(0x0);
-    oledSendCommand(SSD1306_SET_START_LINE | 0x0);
-    oledSendCommand(SSD1306_CHARGE_PUMP);
-    oledSendCommand(0x14);
-    oledSendCommand(SSD1306_MEMORY_ADDR_MODE);
-    oledSendCommand(0x00);
-    oledSendCommand(SSD1306_SET_SEGMENT_REMAP);
-    oledSendCommand(SSD1306_COM_SCAN_DIR_INC);
-    oledSendCommand(SSD1306_SET_COM_PINS);
-    oledSendCommand(0x02);
-    oledSendCommand(SSD1306_SET_CONTRAST_CONTROL);
-    oledSendCommand(0xCF);
-    oledSendCommand(SSD1306_SET_PRECHARGE_PERIOD);
-    oledSendCommand(0xF1);
-    oledSendCommand(SSD1306_SET_VCOM_DESELECT);
-    oledSendCommand(0x40);
-    oledSendCommand(SSD1306_DISPLAY_ALL_ON_RESUME);
-    oledSendCommand(SSD1306_NORMAL_DISPLAY);
-    oledSendCommand(SSD1306_DISPLAY_ON);
+    oled_send_command(SSD1306_DISPLAY_OFF);
+    oled_send_command(SSD1306_SET_DISPLAY_CLOCK_DIV_RATIO);
+    oled_send_command(0x80);
+    oled_send_command(SSD1306_SET_MULTIPLEX_RATIO);
+    oled_send_command(0x1F);
+    oled_send_command(SSD1306_SET_DISPLAY_OFFSET);
+    oled_send_command(0x0);
+    oled_send_command(SSD1306_SET_START_LINE | 0x0);
+    oled_send_command(SSD1306_CHARGE_PUMP);
+    oled_send_command(0x14);
+    oled_send_command(SSD1306_MEMORY_ADDR_MODE);
+    oled_send_command(0x00);
+    oled_send_command(SSD1306_SET_SEGMENT_REMAP);
+    oled_send_command(SSD1306_COM_SCAN_DIR_INC);
+    oled_send_command(SSD1306_SET_COM_PINS);
+    oled_send_command(0x02);
+    oled_send_command(SSD1306_SET_CONTRAST_CONTROL);
+    oled_send_command(0xCF);
+    oled_send_command(SSD1306_SET_PRECHARGE_PERIOD);
+    oled_send_command(0xF1);
+    oled_send_command(SSD1306_SET_VCOM_DESELECT);
+    oled_send_command(0x40);
+    oled_send_command(SSD1306_DISPLAY_ALL_ON_RESUME);
+    oled_send_command(SSD1306_NORMAL_DISPLAY);
+    oled_send_command(SSD1306_DISPLAY_ON);
 
-    OLED_Clear(); /* Clear the complete LCD during init */
+    oled_clear(); /* Clear the complete LCD during init */
 }
 
 /***************************************************************************************************
@@ -176,13 +176,13 @@ void OLED_Init(void) {
  * description  : This function sends a character to be displayed on LCD.
  Any valid ascii value can be passed to display respective character
  ****************************************************************************************************/
-void OLED_DisplayChar(uint8_t ch) {
+void oled_dispay_char(uint8_t ch) {
     uint8_t dat, i = 0;
 
     if (((OledCursorPos + FONT_SIZE) >= 128) || (ch == '\n')) {
         /* If the cursor has reached to end of line on page1
          OR NewLine command is issued Then Move the cursor to next line */
-        OLED_GoToNextLine();
+        oled_goto_next_line();
     }
     if (ch != '\n') /* TODO */
     {
@@ -192,14 +192,14 @@ void OLED_DisplayChar(uint8_t ch) {
             dat = OledFontTable[ch][i]; /* Get the data to be displayed for
                                            LookUptable*/
 
-            oledSendByte(dat); /* Display the data and keep track of cursor */
+            oled_send_byte(dat); /* Display the data and keep track of cursor */
             OledCursorPos++;
 
             i++;
 
             if (i == FONT_SIZE) /* Exit the loop if End of char is encountered */
             {
-                oledSendByte(0x00); /* Display the data and keep track of cursor */
+                oled_send_byte(0x00); /* Display the data and keep track of cursor */
                 OledCursorPos++;
                 break;
             }
@@ -217,9 +217,9 @@ void OLED_DisplayChar(uint8_t ch) {
  1.The ptr_stringPointer_u8 points to the first char of the string
  and traverses till the end(NULL CHAR)and displays a char each time.
  ****************************************************************************************************/
-void OLED_DisplayString(uint8_t *ptr) {
+void oled_display_string(uint8_t *ptr) {
     while (*ptr)
-        OLED_DisplayChar(*ptr++);
+        oled_dispay_char(*ptr++);
 }
 
 /***************************************************************************************************
@@ -230,35 +230,35 @@ void OLED_DisplayString(uint8_t *ptr) {
  * description  :This function clears the LCD and moves the cursor to beginning
  of first line
  ****************************************************************************************************/
-void OLED_Clear(void) {
+void oled_clear(void) {
     int i;
 
-    oledSendCommand(SSD1306_SET_COLUMN_ADDR);
-    oledSendCommand(0);
-    oledSendCommand(127);
+    oled_send_command(SSD1306_SET_COLUMN_ADDR);
+    oled_send_command(0);
+    oled_send_command(127);
 
-    oledSendCommand(SSD1306_SET_PAGE_ADDR);
-    oledSendCommand(0);
-    oledSendCommand(7);
+    oled_send_command(SSD1306_SET_PAGE_ADDR);
+    oled_send_command(0);
+    oled_send_command(7);
 
-    oledSendStart(SSD1306_ADDRESS);
-    oledSendByte(SSD1306_DATA_CONTINUE);
+    oled_send_start(SSD1306_ADDRESS);
+    oled_send_byte(SSD1306_DATA_CONTINUE);
 
     for (i = 0; i < 512; i++) // Write Zeros to clear the display
     {
-        oledSendByte(0);
+        oled_send_byte(0);
     }
 
-    oledSendCommand(SSD1306_SET_COLUMN_ADDR);
-    oledSendCommand(0);
-    oledSendCommand(127);
+    oled_send_command(SSD1306_SET_COLUMN_ADDR);
+    oled_send_command(0);
+    oled_send_command(127);
 
-    oledSendCommand(SSD1306_SET_PAGE_ADDR);
-    oledSendCommand(0);
-    oledSendCommand(7);
+    oled_send_command(SSD1306_SET_PAGE_ADDR);
+    oled_send_command(0);
+    oled_send_command(7);
 
-    oledSendStart(SSD1306_ADDRESS);
-    oledSendByte(SSD1306_DATA_CONTINUE);
+    oled_send_start(SSD1306_ADDRESS);
+    oled_send_byte(SSD1306_DATA_CONTINUE);
 }
 
 /***************************************************************************************************
@@ -270,11 +270,11 @@ void OLED_Clear(void) {
  line. If the requested line number is out of range, it will not move the
  cursor. Note: The line numbers run from 0 to 7
  ****************************************************************************************************/
-void OLED_GoToLine(uint8_t lineNumber) {
+void oled_goto_line(uint8_t lineNumber) {
     if (lineNumber < 8) { /* If the line number is within range
                            then move it to specified line and keep track*/
         OledLineNum = lineNumber;
-        OLED_SetCursor(OledLineNum, 0);
+        oled_set_cursor(OledLineNum, 0);
     }
 }
 
@@ -287,12 +287,12 @@ void OLED_GoToLine(uint8_t lineNumber) {
  If the cursor is on last line and NextLine command is issued then
  it will move the cursor to first line.
  ****************************************************************************************************/
-void OLED_GoToNextLine(void) {
+void oled_goto_next_line(void) {
     /*Increment the current line number.
      In case it exceeds the limit, rool it back to first line */
     OledLineNum++;
     OledLineNum = OledLineNum & 0x07;
-    OLED_SetCursor(OledLineNum, 0); /* Finally move it to next line */
+    oled_set_cursor(OledLineNum, 0); /* Finally move it to next line */
 }
 
 /***************************************************************************************************
@@ -308,22 +308,22 @@ void OLED_GoToNextLine(void) {
  Note:If the Input(Line/Char number) are out of range
  then no action will be taken
  ****************************************************************************************************/
-void OLED_SetCursor(uint8_t lineNumber, uint8_t cursorPosition) {
+void oled_set_cursor(uint8_t lineNumber, uint8_t cursorPosition) {
     /* Move the Cursor to specified position only if it is in range */
     if ((lineNumber <= C_OledLastLine_U8) && (cursorPosition <= 127)) {
         OledLineNum = lineNumber;       /* Save the specified line number */
         OledCursorPos = cursorPosition; /* Save the specified cursor position */
 
-        oledSendCommand(SSD1306_SET_COLUMN_ADDR);
-        oledSendCommand(cursorPosition);
-        oledSendCommand(127);
+        oled_send_command(SSD1306_SET_COLUMN_ADDR);
+        oled_send_command(cursorPosition);
+        oled_send_command(127);
 
-        oledSendCommand(SSD1306_SET_PAGE_ADDR);
-        oledSendCommand(lineNumber);
-        oledSendCommand(7);
+        oled_send_command(SSD1306_SET_PAGE_ADDR);
+        oled_send_command(lineNumber);
+        oled_send_command(7);
 
-        oledSendStart(SSD1306_ADDRESS);
-        oledSendByte(SSD1306_DATA_CONTINUE);
+        oled_send_start(SSD1306_ADDRESS);
+        oled_send_byte(SSD1306_DATA_CONTINUE);
     }
 }
 
@@ -338,23 +338,23 @@ void OLED_SetCursor(uint8_t lineNumber, uint8_t cursorPosition) {
  User can enable/disable the inversion of the dislpay by using the below
  functions. OLED_EnableInversion/OLED_DisableInversion
  ****************************************************************************************************/
-void OLED_DisplayFrame(uint8_t *buffer) {
+void oled_display_frame(uint8_t *buffer) {
     int i;
 
-    OLED_SetCursor(0, 0);
+    oled_set_cursor(0, 0);
 
-    oledSendStart(SSD1306_ADDRESS);
-    oledSendByte(SSD1306_DATA_CONTINUE);
+    oled_send_start(SSD1306_ADDRESS);
+    oled_send_byte(SSD1306_DATA_CONTINUE);
 
     for (i = 0; i < 512; i++) // Send data
     {
-        oledSendByte(buffer[i]);
+        oled_send_byte(buffer[i]);
     }
 }
 
-void OLED_EnableInversion(void) { oledSendCommand(SSD1306_INVERT_DISPLAY); }
+void oled_enable_inversion(void) { oled_send_command(SSD1306_INVERT_DISPLAY); }
 
-void OLED_DisableInversion(void) { oledSendCommand(SSD1306_NORMAL_DISPLAY); }
+void oled_disable_inversion(void) { oled_send_command(SSD1306_NORMAL_DISPLAY); }
 
 /***************************************************************************************************
  void OLED_SetBrightness(uint8_t brightnessValue)
@@ -364,31 +364,31 @@ void OLED_DisableInversion(void) { oledSendCommand(SSD1306_NORMAL_DISPLAY); }
  * description  :
  This function is used to adjust the contrast/Brightness of the OLED.
  ****************************************************************************************************/
-void OLED_SetBrightness(uint8_t brightnessValue) {
-    oledSendCommand(SSD1306_SET_CONTRAST_CONTROL);
-    oledSendCommand(brightnessValue);
+void oled_set_brightness(uint8_t brightnessValue) {
+    oled_send_command(SSD1306_SET_CONTRAST_CONTROL);
+    oled_send_command(brightnessValue);
 }
 
 /********************************************************************************
  Local FUnctions for sending the command/data
  ********************************************************************************/
 
-void oledSendStart(uint8_t address) {
+void oled_send_start(uint8_t address) {
 
     i2c_tx_start(MASTER_TRANSMITTER);
     i2c_tx_address(address);
 }
 
-void oledSendStop(void) { i2c_tx_stop(); }
+void oled_send_stop(void) { i2c_tx_stop(); }
 
-void oledSendByte(uint8_t ch) { i2c_tx_byte(ch); }
+void oled_send_byte(uint8_t ch) { i2c_tx_byte(ch); }
 
-void oledSendCommand(uint8_t cmd) {
+void oled_send_command(uint8_t cmd) {
     // oledSendStart(SSD1306_ADDRESS<<1);
-    oledSendStart(SSD1306_ADDRESS);
-    oledSendByte(SSD1306_COMMAND);
-    oledSendByte(cmd);
-    oledSendStop();
+    oled_send_start(SSD1306_ADDRESS);
+    oled_send_byte(SSD1306_COMMAND);
+    oled_send_byte(cmd);
+    oled_send_stop();
 }
 
 /*****************************************************************************************************/

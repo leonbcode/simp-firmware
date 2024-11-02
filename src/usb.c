@@ -4,7 +4,6 @@
 #include <stdint.h>
 
 #include "matrix.h"
-#include "oled/ssd1306.h"
 #include "usb.h"
 #include "utils.h"
 
@@ -12,7 +11,7 @@ static uint8_t usb_config_status;
 static uint8_t keyboard_protocol;
 
 static uint16_t keyboard_idle_value =
-    128;                           // HID Idle setting, how often the device resends unchanging reports, scaling of 4 because of the reg size
+    128;                         // HID Idle setting, how often the device resends unchanging reports, scaling of 4 because of the reg size
 static uint8_t current_idle = 0; // Counter that updates based on how many SOFE interrupts have occurred
 static uint8_t this_interrupt = 0; // This is not the best way to do it, but it is much more readable than the alternative
 
@@ -108,7 +107,6 @@ static const uint8_t keyboard_HID_descriptor[] PROGMEM = {
     0x29, 0x65, //   Usage Maximum (0x65)
     0x81, 0x00, //   Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
     0xC0,       // End Collection
-
     // 63 bytes
 };
 
@@ -264,7 +262,6 @@ ISR(USB_COM_vect) {
             keyboard_idle_value = idleRate * 4;
             UEINTX &= ~(1 << TXINI);
 
-            OLED_Clear();
             return;
         } else if (bRequest == SET_REPORT) {
             while (!(UEINTX & (1 << RXOUTI)))
@@ -277,7 +274,8 @@ ISR(USB_COM_vect) {
             UEINTX &= ~(1 << TXINI);
             return;
         }
-    } else if (bmRequestType == 0xA1) {
+    }
+    if (bmRequestType == 0xA1) {
         if (bRequest == GET_REPORT) {
             while (!(UEINTX & (1 << TXINI)))
                 ;
@@ -302,13 +300,15 @@ ISR(USB_COM_vect) {
             UEINTX &= ~(1 << TXINI);
             return;
         }
-    } else if (bmRequestType == 0x80 && bRequest == GET_CONFIGURATION) {
+    }
+    if (bmRequestType == 0x80 && bRequest == GET_CONFIGURATION) {
         while (!(UEINTX & (1 << TXINI)))
             ;
         UEDATX = usb_config_status;
         UEINTX &= ~(1 << TXINI);
         return;
-    } else if (bmRequestType == 0x00 && bRequest == SET_CONFIGURATION) {
+    }
+    if (bmRequestType == 0x00 && bRequest == SET_CONFIGURATION) {
         usb_config_status = wValue;
         UEINTX &= ~(1 << TXINI);
         UENUM = KEYBOARD_ENDPOINT_NUM;
@@ -317,27 +317,26 @@ ISR(USB_COM_vect) {
         UECFG1X = 0b00000110;
         UERST = 0x1E;
         UERST = 0;
-
-        // DEBUG
-        uint8_t buffer[512];
-        buffer[0] = 255;
-        OLED_DisplayFrame(buffer);
-        // DEBUG
         return;
-    } else if (bmRequestType == 0x00 && bRequest == SET_ADDRESS) {
+    }
+    if (bmRequestType == 0x00 && bRequest == SET_ADDRESS) {
         UEINTX &= ~(1 << TXINI);
         while (!(UEINTX & (1 << TXINI)))
             ;
         UDADDR = wValue | (1 << ADDEN);
         return;
-    } else if (bRequest == GET_STATUS) {
+    }
+
+    if (bRequest == GET_STATUS) {
         while (!(UEINTX & (1 << TXINI)))
             ;
         UEDATX = 0;
         UEDATX = 0;
         UEINTX &= ~(1 << TXINI);
         return;
-    } else if (bRequest == GET_DESCRIPTOR) {
+    }
+
+    if (bRequest == GET_DESCRIPTOR) {
         uint8_t *descriptor;
         uint8_t descriptor_length;
 
@@ -356,12 +355,7 @@ ISR(USB_COM_vect) {
             break;
         case 0x2200:
             descriptor = keyboard_HID_descriptor;
-            descriptor_length = 63;
-            // DEBUG
-            uint8_t buffer[512];
-            buffer[0] = 255;
-            OLED_DisplayFrame(buffer);
-            // DEBUG
+            descriptor_length = HID_DESCRIPTOR_SIZE;
             break;
         case 0x0300:
             descriptor = language_descriptor;

@@ -6,8 +6,6 @@
 pin_t cols[NUM_COLS];
 pin_t rows[NUM_ROWS];
 
-static const uint8_t layer_switch_keys[NUM_ROWS][NUM_COLS] = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
-
 void matrix_init(void) {
     pin_init(&cols[0], 0x03, 5, 0);
     pin_init(&cols[1], 0x09, 7, 0);

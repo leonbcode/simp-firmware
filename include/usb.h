@@ -20,6 +20,7 @@
 
 #define CONFIG_SIZE 34
 #define HID_OFFSET 18
+#define HID_DESCRIPTOR_SIZE 63
 
 // HID Class-specific request codes - refer to HID Class Specification
 // Chapter 7.2 - Remarks

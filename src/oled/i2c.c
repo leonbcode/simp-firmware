@@ -7,8 +7,8 @@ static bool masterMode;
 
 void i2c_init(void) {
     CLEARBIT(TWSR, TWPS1);
-    CLEARBIT(TWSR, TWPS0); // TWSR &= ~((1 << TWPS1) | (1 << TWPS0)); pre-scalar 1
-    TWBR = ((F_CPU / F_I2C) - 16) / 2;      // baud rate factor 12
+    CLEARBIT(TWSR, TWPS0);             // TWSR &= ~((1 << TWPS1) | (1 << TWPS0)); pre-scalar 1
+    TWBR = ((F_CPU / F_I2C) - 16) / 2; // baud rate factor 12
 }
 
 uint8_t i2c_tx_start(bool mode) {
