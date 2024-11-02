@@ -36,6 +36,7 @@ void setupHardware(void) {
 
     OLED_Init();
     usb_init();
+    matrix_init();
 }
 
 void initializeGraphicsEngine(void) {
@@ -111,15 +112,22 @@ void oledTask(void) {
     OLED_DisplayFrame(buffer);
 }
 
-void sendTestReport(void) {
-    static report_t report = {0, {0x04, 0, 0, 0, 0, 0}};
-    usb_send(report);
-    report.keys[0] = 0;
-    usb_send(report);
-}
 
 void hidTask(void) {
-        sendTestReport();
+    if (!get_usb_config_status())
+        return;
+
+    static report_t prev_report;
+    report_t report;
+
+    matrix_get_report(&report);
+
+    if (memcmp(&prev_report, &report, sizeof(report_t)) == 0) {
+        return;
+    }
+
+    usb_send(report);
+    prev_report = report;
 }
 
 int main(void) {

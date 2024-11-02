@@ -16,7 +16,7 @@
 #define idVendor 0x03eb  // Atmel Corp.
 #define idProduct 0x2042 // ATMega32u4 DFU Bootloader (This isn't a real product so I don't have legitimate IDs)
 
-#define KEYBOARD_ENDPOINT_NUM 3 // The second endpoint is the HID endpoint
+#define KEYBOARD_ENDPOINT_NUM 1 // The second endpoint is the HID endpoint
 
 #define CONFIG_SIZE 34
 #define HID_OFFSET 18
