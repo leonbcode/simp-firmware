@@ -121,7 +121,7 @@ typedef enum { E_BINARY = 2, E_DECIMAL = 10, E_HEX = 16 } NumericSystem_et;
 #define C_MaxBarGraphs_U8 5
 
 void oled_init(void);
-void oled_dispay_char(uint8_t ch);
+void oled_display_char(uint8_t ch);
 void oled_display_string(uint8_t *);
 void oled_clear(void);
 void oled_goto_line(uint8_t);
