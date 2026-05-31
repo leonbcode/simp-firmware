@@ -279,12 +279,7 @@ ISR(USB_COM_vect) {
         if (bRequest == GET_REPORT) {
             while (!(UEINTX & (1 << TXINI)))
                 ;
-            UEDATX = 0; // keyboard_modifier;
-            for (int i = 0; i < 6; i++)
-                UEDATX = 0x01;
-            UEDATX = 0x04;
-            for (int i = 0; i < 5; i++)
-                UEDATX = 0;
+            usb_transmit(last_report);
             UEINTX &= ~(1 << TXINI);
             return;
         } else if (bRequest == GET_IDLE) {
