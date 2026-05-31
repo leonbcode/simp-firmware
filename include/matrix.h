@@ -30,4 +30,7 @@ uint8_t pin_read(pin_t *pin);
 static const uint8_t matrix[NUM_LAYERS][NUM_ROWS][NUM_COLS] = {
     {{0x04, 0x05, 0x06, 0x07}, {0x04, 0x05, 0x06, 0x07}, {0x04, 0x05, 0x06, 0x07}, {0x04, 0x05, 0x06, 0x07}}};
 
+// Layer switch keys use binary encoding (powers of 2: 1, 2, 4, 8, etc.)
+// Pressing multiple layer keys ORs their values: e.g., keys with value 1 and 4 
+// activate layer 5 (binary 0101). Supports 2^n layers with n layer switch keys.
 static const uint8_t layer_switch_keys[NUM_ROWS][NUM_COLS] = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};

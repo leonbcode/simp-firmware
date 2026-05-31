@@ -31,7 +31,7 @@ void matrix_get_report(report_t *const report) {
         for (int j = 0; j < NUM_COLS; j++) {
             if (!pin_read(&cols[j])) {
                 if (layer_switch_keys[i][j] > 0) {
-                    layer += layer_switch_keys[i][j];
+                    layer |= layer_switch_keys[i][j];
                 }
                 pressed_keys[i][j] = 1;
             }
